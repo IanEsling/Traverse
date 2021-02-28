@@ -29,22 +29,22 @@ public class TraverseTest {
     }
 
     @Test
-    void setVerboseOutput() {
+    void setSummaryOutput() {
         var output = mock(PrintStream.class);
 
-        var app = Traverse.createFromArgs(new String[]{"https://google.com", "v"}, output);
+        var app = Traverse.createFromArgs(new String[]{"https://google.com", "s"}, output);
 
         assertThat(app).isPresent();
-        assertThat(app.get().isVerbose()).isTrue();
+        assertThat(app.get().isSummary()).isTrue();
 
-        app = Traverse.createFromArgs(new String[]{"https://google.com", "V"}, output);
+        app = Traverse.createFromArgs(new String[]{"https://google.com", "S"}, output);
 
         assertThat(app).isPresent();
-        assertThat(app.get().isVerbose()).isTrue();
+        assertThat(app.get().isSummary()).isTrue();
 
         app = Traverse.createFromArgs(new String[]{"https://google.com", "x"}, output);
 
         assertThat(app).isPresent();
-        assertThat(app.get().isVerbose()).isFalse();
+        assertThat(app.get().isSummary()).isFalse();
     }
 }

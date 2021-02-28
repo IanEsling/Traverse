@@ -15,15 +15,15 @@ import static org.mockito.Mockito.when;
 public class SiteMapperTest {
 
     @Mock
-    PageLoader pageLoader;
+    UrlService urlService;
     @InjectMocks
     SiteMapper siteMapper;
 
     @Test
     void mapSite() {
-        when(pageLoader.linksOnPage("a")).thenReturn(List.of("b", "e"));
-        when(pageLoader.linksOnPage("b")).thenReturn(List.of("c", "d"));
-        when(pageLoader.linksOnPage("e")).thenReturn(List.of("f", "g"));
+        when(urlService.linksOnPage("a")).thenReturn(List.of("b", "e"));
+        when(urlService.linksOnPage("b")).thenReturn(List.of("c", "d"));
+        when(urlService.linksOnPage("e")).thenReturn(List.of("f", "g"));
 
         var map = siteMapper.mapSite(new RootUrl("a", s -> true));
 
@@ -36,9 +36,9 @@ public class SiteMapperTest {
 
     @Test
     void doNotRecurse(){
-        when(pageLoader.linksOnPage("a")).thenReturn(List.of("b", "e"));
-        when(pageLoader.linksOnPage("b")).thenReturn(List.of("a", "e"));
-        when(pageLoader.linksOnPage("e")).thenReturn(List.of("a", "b"));
+        when(urlService.linksOnPage("a")).thenReturn(List.of("b", "e"));
+        when(urlService.linksOnPage("b")).thenReturn(List.of("a", "e"));
+        when(urlService.linksOnPage("e")).thenReturn(List.of("a", "b"));
 
         var map = siteMapper.mapSite(new RootUrl("a", s -> true));
 
@@ -51,10 +51,10 @@ public class SiteMapperTest {
 
     @Test
     void onlyMapLinksToSameDomain(){
-        when(pageLoader.linksOnPage("domain")).thenReturn(List.of("domain-1", "not-domain"));
-        when(pageLoader.linksOnPage("domain-1")).thenReturn(List.of("domain-2", "domain-3", "also-not-domain"));
-        when(pageLoader.linksOnPage("domain-2")).thenReturn(List.of());
-        when(pageLoader.linksOnPage("domain-3")).thenReturn(List.of());
+        when(urlService.linksOnPage("domain")).thenReturn(List.of("domain-1", "not-domain"));
+        when(urlService.linksOnPage("domain-1")).thenReturn(List.of("domain-2", "domain-3", "also-not-domain"));
+        when(urlService.linksOnPage("domain-2")).thenReturn(List.of());
+        when(urlService.linksOnPage("domain-3")).thenReturn(List.of());
 
         var map = siteMapper.mapSite("domain");
 
