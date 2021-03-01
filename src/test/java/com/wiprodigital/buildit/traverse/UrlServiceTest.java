@@ -1,6 +1,5 @@
 package com.wiprodigital.buildit.traverse;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,17 +14,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UrlServiceTest {
 
-    String rootUrl = "http://root.url";
-
     @Mock
     PageParser pageParser;
 
+    @InjectMocks
     UrlService testee;
-
-    @BeforeEach
-    void setup(){
-        testee = new UrlService(pageParser, rootUrl);
-    }
 
     @Test
     void returnLinksFromParser() {
@@ -37,21 +30,29 @@ class UrlServiceTest {
     }
 
     @Test
-    void reformatLocalLinksToRootUrl(){
+    void allLinksHaveSlashesRemoved() {
         var url = "pageUrl";
-        when(pageParser.getLinksOnPage(url)).thenReturn(List.of("/local", "not-local", "/more-local"));
+        when(pageParser.getLinksOnPage(url)).thenReturn(List.of("a/", "b", "c/"));
 
         var links = testee.linksOnPage(url);
-        assertThat(links).containsExactlyInAnyOrder(rootUrl + "/local", "not-local", rootUrl + "/more-local");
+        assertThat(links).containsExactlyInAnyOrder("a", "b", "c");
     }
 
     @Test
-    void reformatLocalLinksWhenRootUrlHasTrailingSlash(){
-        testee = new UrlService(pageParser, rootUrl + "/");
+    void removeDuplicateLinks() {
         var url = "pageUrl";
-        when(pageParser.getLinksOnPage(url)).thenReturn(List.of("/local", "not-local", "/more-local"));
+        when(pageParser.getLinksOnPage(url)).thenReturn(List.of("a", "a", "b"));
 
         var links = testee.linksOnPage(url);
-        assertThat(links).containsExactlyInAnyOrder(rootUrl + "/local", "not-local", rootUrl + "/more-local");
+        assertThat(links).containsExactlyInAnyOrder("a", "b");
+    }
+
+    @Test
+    void trimTrailingSpacesFromLinks() {
+        var url = "pageUrl";
+        when(pageParser.getLinksOnPage(url)).thenReturn(List.of("a ", "a", "b"));
+
+        var links = testee.linksOnPage(url);
+        assertThat(links).containsExactlyInAnyOrder("a", "b");
     }
 }

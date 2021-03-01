@@ -30,6 +30,7 @@ public class SiteMapper {
                 map.put(url, urls);
                 urlsToVisit.addAll(urls);
             }
+            System.out.print(".");
         }
         return map;
     }

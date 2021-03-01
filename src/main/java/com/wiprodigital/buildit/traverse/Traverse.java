@@ -46,7 +46,7 @@ public class Traverse {
 
     private void run() {
         var rootUrl = uri.toASCIIString();
-        var mapper = new SiteMapper(new UrlService(new JsoupPageParser(), rootUrl));
+        var mapper = new SiteMapper(new UrlService(new JsoupPageParser()));
         var siteMap = mapper.mapSite(rootUrl);
         System.out.println("Found " + siteMap.size() + " pages starting from " + rootUrl);
         siteMap.forEach((k, v) -> System.out.println("- " + k + ", no of links on page: " + v.size()));
