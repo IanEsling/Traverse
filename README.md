@@ -6,11 +6,11 @@ Traverse is a Java tool for crawling a given website, following all the links it
 
 Traverse requires Java 11 or later to run and requires a URL parameter (e.g. https://wiprodigital.com) for the site to crawl. There is an executable jar file (compiled with Java 11.0.10) in the root of the project that can be run from the command line:
 ```bash
-java -jar traverse.jar {URL}
+java -jar traverse.jar URL-TO-CRAWL
 ```
 This will run in "verbose" mode, listing all pages and all of their links. If there's a lot of output you can run it in "summary" mode which will just list each page found with the total number of links on each page. This is done by supplying an optional second parameter of "s":
 ```bash
-java -jar traverse.jar {URL} s
+java -jar traverse.jar URL-TO-CRAWL s
 ```
 The URL parameter supplied must be in the format of a valid HTTP URL, a `java.net.MalformedURLException` will be thrown if it is invalid.
 
